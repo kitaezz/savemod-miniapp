@@ -60,19 +60,83 @@
             border: 1px solid rgba(255, 255, 255, 0.06); 
             margin-bottom: 15px; 
         }
-        .card-header {
+        
+        /* Стили заголовков разделов */
+        .section-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            color: #aaa;
-            font-size: 14px;
-            letter-spacing: 1px;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 5px;
         }
-        .card-header i { font-size: 16px; }
-        .card-header h3 { font-weight: bold; text-transform: uppercase; font-size: 14px; }
+        .header-icon-box {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #cfd2d6;
+            font-size: 22px;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .header-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-        /* Блоки команд */
+        /* ===== НОВЫЙ БЛОК "КАК НАЧАТЬ" (как на скрине) ===== */
+        .how-to-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+        .how-to-item:last-child {
+            margin-bottom: 0;
+        }
+        .how-to-icon-box {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e5e7eb;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .how-to-text {
+            display: flex;
+            flex-direction: column;
+            padding-top: 3px; /* легкая калибровка */
+        }
+        .how-to-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffffff;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+        .how-to-desc {
+            font-size: 13px;
+            color: #9ca3af;
+            line-height: 1.4;
+        }
+        /* ==================================================== */
+
+        /* Блоки команд (черное окно и точка) */
         .cmd-block {
             background: rgba(255, 255, 255, 0.03);
             border-radius: 10px;
@@ -185,36 +249,64 @@
             <div class="main-title">KIT3GRAM</div>
             <div class="sub-title">Приветствую тебя в нашем комьюнити!<br>Это твоя возможность перестать использовать лишние моды и боты.</div>
             
+            <!-- ========= ОБНОВЛЕННЫЙ БЛОК "КАК НАЧАТЬ" (ТОЧНО КАК НА СКРИНЕ) ========= -->
             <div class="card">
-                <div class="card-header"><i class="fa-solid fa-rocket" style="color: #6b7280;"></i><h3>КАК НАЧАТЬ</h3></div>
-                <div class="cmd-block" style="border-color: #6b7280;">
-                    <div class="cmd-name">ОТКРЫТИЕ СТОРИС ТЕЛЕГРАМ</div>
-                    <div class="cmd-desc">Инструкция по работе с историями</div>
+                <div class="section-header">
+                    <div class="header-icon-box"><i class="fa-solid fa-rocket"></i></div>
+                    <div class="header-title">КАК НАЧАТЬ</div>
                 </div>
-                <div class="cmd-block" style="border-color: #6b7280;">
-                    <div class="cmd-name">ИСПОЛЬЗОВАНИЕ БОТОВ ДЛЯ БИЗНЕСА</div>
-                    <div class="cmd-desc">Автоматизация бизнес-процессов</div>
+                
+                <div class="how-to-item">
+                    <div class="how-to-icon-box"><i class="fa-solid fa-gear"></i></div>
+                    <div class="how-to-text">
+                        <div class="how-to-title">ОТКРОЙТЕ НАСТРОЙКИ TELEGRAM</div>
+                        <div class="how-to-desc">Перейдите в главное меню и зайдите в настройки приложения.</div>
+                    </div>
                 </div>
-                <div class="cmd-block" style="border-color: #6b7280;">
-                    <div class="cmd-name">УПРАВЛЕНИЕ ЧАТ-БОТАМИ</div>
-                    <div class="cmd-desc">Настройка и взаимодействие</div>
+                
+                <div class="how-to-item">
+                    <div class="how-to-icon-box"><i class="fa-solid fa-briefcase"></i></div>
+                    <div class="how-to-text">
+                        <div class="how-to-title">РАЗДЕЛ «TELEGRAM ДЛЯ БИЗНЕСА»</div>
+                        <div class="how-to-desc">Найдите пункт для управления бизнес-функциями Telegram.</div>
+                    </div>
                 </div>
-                <div class="cmd-block" style="border-color: #6b7280; margin-bottom: 0;">
-                    <div class="cmd-name">ДОБАВИТЬ НАШЕГО БОТА</div>
-                    <div class="cmd-desc">Внедрение нашего бота в ваши комнаты</div>
+                
+                <div class="how-to-item">
+                    <div class="how-to-icon-box"><i class="fa-solid fa-robot"></i></div>
+                    <div class="how-to-text">
+                        <div class="how-to-title">УПРАВЛЕНИЕ ЧАТ-БОТАМИ</div>
+                        <div class="how-to-desc">Откройте настройку подключённых и доступных ботов.</div>
+                    </div>
+                </div>
+                
+                <div class="how-to-item" style="margin-bottom: 0;">
+                    <div class="how-to-icon-box"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="how-to-text">
+                        <div class="how-to-title">ДОБАВЬТЕ НАШЕГО БОТА</div>
+                        <div class="how-to-desc">Вставьте юзернейм бота и наслаждайтесь!</div>
+                    </div>
                 </div>
             </div>
+            <!-- =============================================================== -->
 
             <div class="card">
-                <div class="card-header"><i class="fa-solid fa-meteor" style="color: #6b7280;"></i><h3>СЛУЖЕБНЫЕ</h3></div>
+                <div class="section-header">
+                    <div class="header-icon-box"><i class="fa-solid fa-satellite"></i></div>
+                    <div class="header-title">СЛУЖЕБНЫЕ</div>
+                </div>
                 <div class="cmd-block"><div class="cmd-name">.amonth</div><div class="cmd-desc">Рассылка статистики по итогам месяца доступна (1-2 раза в месяц)</div></div>
                 <div class="cmd-block"><div class="cmd-name">.month</div><div class="cmd-desc">Статистика по оплатам за месяц доступна (1-2 раза в месяц)</div></div>
             </div>
 
             <div class="card">
-                <div class="card-header"><i class="fa-solid fa-star" style="color: #6b7280;"></i><h3>РАЗВЛЕЧЕНИЯ</h3></div>
+                <div class="section-header">
+                    <div class="header-icon-box"><i class="fa-solid fa-star"></i></div>
+                    <div class="header-title">РАЗВЛЕЧЕНИЯ</div>
+                </div>
                 <div class="cmd-block"><div class="cmd-name">.fbo</div><div class="cmd-desc">Предсказание на сегодня</div></div>
                 <div class="cmd-block"><div class="cmd-name">.typing</div><div class="cmd-desc">Анимация печати текста</div></div>
+                
                 <div class="cmd-block">
                     <div class="cmd-name">.spam</div><div class="cmd-desc">Спам текстом 10 раз</div>
                     <div class="cmd-limits">
@@ -222,14 +314,19 @@
                         <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium: Безлимит</span>
                     </div>
                 </div>
+                
                 <div class="cmd-block"><div class="cmd-name">.act</div><div class="cmd-desc">Имитация разных действий (поиск фото, отправка, игры...)</div></div>
                 <div class="cmd-block"><div class="cmd-name">.send</div><div class="cmd-desc">Фиктивный 2-й Клипто бота send 2.5</div></div>
                 <div class="cmd-block"><div class="cmd-name">.love</div><div class="cmd-desc">Красивая анимация сердца</div></div>
-                <div class="cmd-block"><div class="cmd-name">.k-kill</div><div class="cmd-desc">Авто-убийство в чате (как в kill)</div></div>
+                
+                <div class="cmd-block"><div class="cmd-name">.k_kill</div><div class="cmd-desc">Авто-убийство в чате (как в kill)</div></div>
+                
                 <div class="cmd-block"><div class="cmd-name">.cat</div><div class="cmd-desc">Случайное фото кота</div></div>
                 <div class="cmd-block"><div class="cmd-name">.troll</div><div class="cmd-desc">Спам случайными сообщениями</div></div>
                 <div class="cmd-block"><div class="cmd-name">.online</div><div class="cmd-desc">Имитация режима вечного онлайн</div></div>
-                <div class="cmd-block"><div class="cmd-name">.a-greet</div><div class="cmd-desc">Авто-приветствие новых сообщений (gura, yur)</div></div>
+                
+                <div class="cmd-block"><div class="cmd-name">.a_greet</div><div class="cmd-desc">Авто-приветствие новых сообщений (gura, yur)</div></div>
+                
                 <div class="cmd-block"><div class="cmd-name">.ghoul</div><div class="cmd-desc">Я - дух</div></div>
                 <div class="cmd-block"><div class="cmd-name">.grs</div><div class="cmd-desc">Камень-Ножницы-Бумага (2 игра)</div></div>
                 <div class="cmd-block"><div class="cmd-name">.coin</div><div class="cmd-desc">Орёл или Решка (2 игра)</div></div>
@@ -237,51 +334,58 @@
                 <div class="cmd-block">
                     <div class="cmd-name">.game</div><div class="cmd-desc">Сыграть в игру (Tas, Shark, Beetle, VK)</div>
                     <div class="cmd-limits">
-                        <span class="limit-basic">Обычный: 5 раз/день</span>
-                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium: Безлимит</span>
+                        <span class="limit-basic">Обычный: 10 сек.</span>
+                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium: 4 сек.</span>
                     </div>
                 </div>
+                
                 <div class="cmd-block">
-                    <div class="cmd-name">.a-mute</div><div class="cmd-desc">Авто-мьют новых</div>
+                    <div class="cmd-name">.a_mute</div><div class="cmd-desc">Авто-мьют новых</div>
                     <div class="cmd-limits">
-                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium: Безлимит</span>
+                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium</span>
                     </div>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-header"><i class="fa-solid fa-circle-plus" style="color: #6b7280;"></i><h3>ПЛЮС ФУНКЦИИ</h3></div>
+                <div class="section-header">
+                    <div class="header-icon-box"><i class="fa-solid fa-circle-plus"></i></div>
+                    <div class="header-title">ПЛЮС ФУНКЦИИ</div>
+                </div>
                 <div class="cmd-block">
                     <div class="cmd-name">.auto</div><div class="cmd-desc">Автопост навстречу в чате</div>
                     <div class="cmd-limits">
-                        <span class="limit-basic">Обычный: 5 раз/день</span>
-                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium: Безлимит</span>
+                        <span class="limit-basic">Обычный: 5 сек.</span>
+                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium: 3 сек.</span>
                     </div>
                 </div>
                 <div class="cmd-block"><div class="cmd-name">.delete</div><div class="cmd-desc">Выполнять автоудаление сообщений по ID</div></div>
                 <div class="cmd-block">
                     <div class="cmd-name">.find</div><div class="cmd-desc">Поиск информации по юзеру или номеру</div>
                     <div class="cmd-limits">
-                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium: Безлимит</span>
+                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium</span>
                     </div>
                 </div>
                 <div class="cmd-block">
                     <div class="cmd-name">.post</div><div class="cmd-desc">Быстро написать пост в чате</div>
                     <div class="cmd-limits">
-                        <span class="limit-basic">Обычный: 5 раз/день</span>
-                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium: Безлимит</span>
+                        <span class="limit-basic">Обычный: 5 сек.</span>
+                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium: 2 сек.</span>
                     </div>
                 </div>
                 <div class="cmd-block">
                     <div class="cmd-name">.image</div><div class="cmd-desc">Генерация изображения по запросу</div>
                     <div class="cmd-limits">
-                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium: Безлимит</span>
+                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium: 10 секунд</span>
                     </div>
                 </div>
             </div>
             
             <div class="card">
-                <div class="card-header"><i class="fa-solid fa-user" style="color: #6b7280;"></i><h3>ПРОФИЛЬ</h3></div>
+                <div class="section-header">
+                    <div class="header-icon-box"><i class="fa-solid fa-user"></i></div>
+                    <div class="header-title">ПРОФИЛЬ</div>
+                </div>
                 <div class="cmd-block"><div class="cmd-name">.nick</div><div class="cmd-desc">Авто-смена ника по интервалу: nick_on / nick_off</div></div>
                 <div class="cmd-block"><div class="cmd-name">.time</div><div class="cmd-desc">Авто-показ времени: time_on / time_off</div></div>
                 <div class="cmd-block"><div class="cmd-name">.remove</div><div class="cmd-desc">Очистка профиля, команд, обновление аватара</div></div>
@@ -289,14 +393,17 @@
                 <div class="cmd-block">
                     <div class="cmd-name">.post</div><div class="cmd-desc">Разрешить упоминание в фото и истории</div>
                     <div class="cmd-limits">
-                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium: Безлимит</span>
+                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium</span>
                     </div>
                 </div>
                 <div class="cmd-block"><div class="cmd-name">.status</div><div class="cmd-desc">Авто-статус профиля по расписанию</div></div>
             </div>
             
             <div class="card">
-                <div class="card-header"><i class="fa-solid fa-video" style="color: #6b7280;"></i><h3>СЕРИИ</h3></div>
+                <div class="section-header">
+                    <div class="header-icon-box"><i class="fa-solid fa-rocket"></i></div>
+                    <div class="header-title">🔥 СЕРИИ</div>
+                </div>
                 <div class="cmd-block"><div class="cmd-name">.stories_top</div><div class="cmd-desc">Топ ваших серий</div></div>
                 <div class="cmd-block"><div class="cmd-name">.stories</div><div class="cmd-desc">Следить за серией как в TikTok</div></div>
                 <div class="cmd-block"><div class="cmd-name">.stories_freeze</div><div class="cmd-desc">Заморозить серию</div></div>
@@ -305,7 +412,10 @@
             </div>
 
             <div class="card">
-                <div class="card-header"><i class="fa-solid fa-circle-info" style="color: #6b7280;"></i><h3>ИНФОРМАЦИЯ</h3></div>
+                <div class="section-header">
+                    <div class="header-icon-box"><i class="fa-solid fa-circle-info"></i></div>
+                    <div class="header-title">ИНФОРМАЦИЯ</div>
+                </div>
                 <div class="cmd-block"><div class="cmd-name">.info</div><div class="cmd-desc">Информация о сообщении</div></div>
                 <div class="cmd-block"><div class="cmd-name">.ping</div><div class="cmd-desc">Проверка задержки бота</div></div>
                 <div class="cmd-block"><div class="cmd-name">.help</div><div class="cmd-desc">Вызвать это сообщение</div></div>
@@ -318,7 +428,10 @@
             <div class="main-title">FAQ</div>
             <div class="sub-title">ЧАСТО ЗАДАВАЕМЫЕ ВОПРОСЫ</div>
             <div class="card">
-                <div class="card-header"><i class="fa-solid fa-circle-question" style="color: #6b7280;"></i><h3>ВОПРОСЫ И ОТВЕТЫ</h3></div>
+                <div class="section-header">
+                    <div class="header-icon-box"><i class="fa-solid fa-circle-question"></i></div>
+                    <div class="header-title">ВОПРОСЫ И ОТВЕТЫ</div>
+                </div>
                 <div class="faq-question">ВЫ МОЖЕТЕ УКРАСТЬ ПОДАРКИ?</div>
                 <div class="faq-answer">Нет, мы не занимаемся кражей подарков. Просто не выдавайте лишние права боту, ему достаточно прав лишь на сообщения.</div>
                 <div class="faq-question">КАК СОХРАНИТЬ ОДНОРАЗОВОЕ МЕДИА?</div>
@@ -382,6 +495,10 @@
             <div class="main-title">НАСТРОЙКИ</div>
             <div class="sub-title">Управление вашим профилем</div>
             <div class="card">
+                <div class="section-header">
+                    <div class="header-icon-box"><i class="fa-solid fa-gear"></i></div>
+                    <div class="header-title">НАСТРОЙКИ</div>
+                </div>
                 <div class="toggle-wrap">
                     <div class="toggle-text">
                         <h3>ПРИВАТНЫЙ ПРОФИЛЬ</h3>
@@ -417,8 +534,7 @@
             const navItems = document.querySelectorAll('.nav-item');
             const tabContents = document.querySelectorAll('.tab-content');
 
-            // ВАЖНО: Замените этот URL на ваш адрес ngrok (или залейте его на сервер)
-            // Если запускаете локально для теста, оставьте localhost
+            // ВАЖНО: Замените этот URL на ваш адрес ngrok
             const API_BASE = "http://localhost:8080"; 
 
             navItems.forEach(item => {
