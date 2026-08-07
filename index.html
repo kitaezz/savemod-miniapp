@@ -2,419 +2,495 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SaveMod Bot</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KIT3GRAM MiniApp</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* Базовые сбросы */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
-            padding: 16px;
-            min-height: 100vh;
-        }
-        .header {
-            text-align: center;
-            padding: 20px 0 16px;
-            border-bottom: 1px solid var(--tg-theme-secondary-bg-color, #e0e0e0);
-            margin-bottom: 16px;
-        }
-        .header .logo {
-            font-size: 48px;
-            display: block;
-            margin-bottom: 8px;
-        }
-        .header h1 {
-            font-size: 22px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #3390ec, #5c9ce6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .header .sub {
-            font-size: 13px;
-            color: var(--tg-theme-hint-color, #8e8e8e);
-            margin-top: 4px;
-        }
-        .status-card {
-            background: var(--tg-theme-secondary-bg-color, #f0f0f0);
-            border-radius: 12px;
-            padding: 14px 16px;
-            margin-bottom: 16px;
+            background-color: #0e1012;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 30px 30px;
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+        }
+
+        .app-content {
+            flex: 1;
+            padding: 20px 15px;
+            overflow-y: auto;
+            padding-bottom: 120px;
+            display: flex;
+            flex-direction: column;
             align-items: center;
         }
-        .status-card .left .label {
-            font-size: 12px;
-            color: var(--tg-theme-hint-color, #8e8e8e);
-        }
-        .status-card .left .value {
-            font-weight: 600;
-            font-size: 16px;
-            margin-top: 2px;
-        }
-        .status-card .right {
-            text-align: right;
-        }
-        .status-card .right .label {
-            font-size: 12px;
-            color: var(--tg-theme-hint-color, #8e8e8e);
-        }
-        .status-card .right .value {
-            font-weight: 600;
-            font-size: 16px;
-        }
-        .badge-premium {
-            color: #ffd700;
-        }
-        .badge-free {
-            color: var(--tg-theme-hint-color, #8e8e8e);
-        }
-        .section {
-            margin-bottom: 16px;
-        }
-        .section-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--tg-theme-hint-color, #8e8e8e);
-            margin-bottom: 8px;
-            padding-left: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .btn-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
-        }
-        .btn-grid.two-col {
-            grid-template-columns: 1fr 1fr;
-        }
-        .btn {
-            background: var(--tg-theme-secondary-bg-color, #f0f0f0);
-            color: var(--tg-theme-text-color, #000000);
-            border: none;
-            border-radius: 10px;
-            padding: 12px 6px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.15s;
+
+        .tab-content { display: none; width: 100%; max-width: 450px; animation: fadeIn 0.3s; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .main-title {
+            font-size: 28px;
+            letter-spacing: 3px;
+            font-weight: 800;
             text-align: center;
-            line-height: 1.3;
-        }
-        .btn:active {
-            transform: scale(0.95);
-            opacity: 0.7;
-        }
-        .btn .emoji {
-            display: block;
-            font-size: 22px;
-            margin-bottom: 2px;
-        }
-        .btn .label {
-            font-size: 11px;
-            color: var(--tg-theme-hint-color, #8e8e8e);
-        }
-        .btn-primary {
-            background: var(--tg-theme-button-color, #3390ec);
-            color: var(--tg-theme-button-text-color, #ffffff);
-        }
-        .btn-primary .label {
-            color: var(--tg-theme-button-text-color, #ffffff);
-            opacity: 0.8;
-        }
-        .btn-success {
-            background: #34c759;
-            color: #ffffff;
-        }
-        .btn-success .label {
-            color: #ffffff;
-            opacity: 0.8;
-        }
-        .btn-full {
-            grid-column: 1 / -1;
-        }
-        .divider {
-            height: 1px;
-            background: var(--tg-theme-secondary-bg-color, #e0e0e0);
-            margin: 12px 0;
-        }
-        .premium-block {
-            background: linear-gradient(135deg, #ffd70015, #ffd70008);
-            border: 1px solid #ffd70040;
-            border-radius: 12px;
-            padding: 14px 16px;
-            margin-bottom: 16px;
-        }
-        .premium-block .title {
-            font-weight: 600;
-            font-size: 15px;
-            color: #ffd700;
-        }
-        .premium-block .desc {
-            font-size: 13px;
-            color: var(--tg-theme-hint-color, #8e8e8e);
-            margin-top: 4px;
-        }
-        .premium-block .prices {
-            display: flex;
-            gap: 8px;
+            margin-bottom: 5px;
             margin-top: 10px;
-            flex-wrap: wrap;
+            color: #fff;
         }
-        .premium-block .prices .price-btn {
-            background: var(--tg-theme-secondary-bg-color, #f0f0f0);
-            border: none;
-            border-radius: 8px;
-            padding: 8px 14px;
+        .sub-title {
+            text-align: center;
             font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            color: var(--tg-theme-text-color, #000000);
-            flex: 1;
-            min-width: 70px;
-            text-align: center;
+            color: #888;
+            margin-bottom: 25px;
+            line-height: 1.5;
         }
-        .premium-block .prices .price-btn:active {
-            transform: scale(0.95);
+
+        .card { 
+            background: rgba(255, 255, 255, 0.04); 
+            border-radius: 18px; 
+            padding: 20px; 
+            border: 1px solid rgba(255, 255, 255, 0.06); 
+            margin-bottom: 15px; 
         }
-        .premium-block .prices .price-btn .star {
-            color: #ffd700;
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: #aaa;
+            font-size: 14px;
+            letter-spacing: 1px;
         }
-        .footer {
-            text-align: center;
-            padding: 16px 0 8px;
-            border-top: 1px solid var(--tg-theme-secondary-bg-color, #e0e0e0);
-            margin-top: 16px;
+        .card-header i { font-size: 16px; }
+        .card-header h3 { font-weight: bold; text-transform: uppercase; font-size: 14px; }
+
+        /* Блоки команд */
+        .cmd-block {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-left: 2px solid #3a3d42;
+        }
+        .cmd-name { font-weight: bold; font-size: 16px; color: #fff; margin-bottom: 5px; }
+        .cmd-desc { font-size: 14px; color: #ddd; line-height: 1.3; margin-bottom: 8px; }
+        
+        /* Стили кнопок лимитов */
+        .cmd-limits { display: flex; gap: 10px; flex-wrap: wrap; }
+        .limit-basic {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            border: 1px solid #3b82f6;
+            padding: 4px 12px;
+            border-radius: 20px;
             font-size: 12px;
-            color: var(--tg-theme-hint-color, #8e8e8e);
         }
-        .footer a {
-            color: var(--tg-theme-button-color, #3390ec);
-            text-decoration: none;
+        .limit-premium {
+            background: rgba(168, 85, 247, 0.1);
+            color: #c084fc;
+            border: 1px solid #a855f7;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
         }
-        .tg-link {
-            color: var(--tg-theme-button-color, #3390ec);
-            font-weight: 500;
+        .limit-premium i { font-size: 11px; margin-right: 4px; }
+
+        /* FAQ */
+        .faq-question { font-size: 14px; font-weight: bold; margin-bottom: 6px; color: #ccc; text-transform: uppercase; }
+        .faq-answer { font-size: 13px; color: #888; line-height: 1.4; margin-bottom: 15px; }
+        .support-btn { background: #1e2025; width: 100%; padding: 15px; border-radius: 12px; text-align: center; color: #fff; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); font-size: 14px; display: flex; justify-content: center; align-items: center; gap: 10px; }
+
+        /* Профиль */
+        .avatar-box { display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .avatar { width: 100px; height: 100px; border-radius: 50%; background: #222; margin-bottom: 15px; object-fit: cover; border: 3px solid #333; }
+        .user-id {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 10px 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 10px 0 15px 0;
+            border: 1px solid rgba(255,255,255,0.05);
         }
-        @media (max-width: 400px) {
-            .btn-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .btn-grid .btn-full {
-                grid-column: 1 / -1;
-            }
+        .user-id div { display: flex; flex-direction: column; align-items: center; }
+        .user-id span { font-size: 11px; color: #888; }
+        .user-id strong { font-size: 16px; }
+        
+        .sub-button {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 15px 25px;
+            width: 100%;
+            text-align: center;
+            color: #aaa;
+            cursor: pointer;
+            font-size: 14px;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+        .sub-button i { margin-right: 8px; color: #888; }
+
+        /* Статистика */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .stat-block { background: rgba(255, 255, 255, 0.04); border-radius: 12px; padding: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.02); }
+        .stat-block span { font-size: 12px; color: #888; display: block; margin-bottom: 5px; }
+        .stat-block strong { font-size: 20px; font-weight: bold; }
+
+        /* Настройки (Тумблеры) */
+        .toggle-wrap { display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; margin-bottom: 12px; }
+        .toggle-text h3 { font-size: 14px; font-weight: bold; letter-spacing: 1px; margin-bottom: 5px; }
+        .toggle-text p { font-size: 13px; color: #888; line-height: 1.4; }
+        .toggle-switch { background: #333; width: 44px; height: 24px; border-radius: 20px; position: relative; flex-shrink: 0; margin-top: 3px; }
+        .toggle-switch.active { background: #7b8bac; }
+        .toggle-switch::after { content: ''; position: absolute; top: 2px; right: 2px; width: 20px; height: 20px; background: #fff; border-radius: 50%; transition: 0.2s; }
+        .toggle-switch.active::after { right: 22px; }
+
+        /* Стеклянное меню */
+        .glass-navbar {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            width: auto; display: flex; align-items: center; justify-content: space-around; gap: 18px;
+            padding: 14px 22px; border-radius: 50px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8); z-index: 999;
+            background: rgba(24, 26, 30, 0.65); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .nav-item {
+            color: rgba(255, 255, 255, 0.4); font-size: 22px; cursor: pointer;
+            transition: all 0.2s; padding: 4px; border-radius: 50%; width: 34px; height: 34px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .nav-item.active { color: #ffffff; background: rgba(255, 255, 255, 0.08); }
+
+        @media (max-width: 480px) {
+            .glass-navbar { gap: 12px; padding: 12px 16px; width: 92%; max-width: 340px; }
+            .nav-item { font-size: 20px; width: 30px; height: 30px; }
         }
     </style>
 </head>
 <body>
+    <div class="app-content">
+        <!-- 1. ДОМ -->
+        <div id="tab-home" class="tab-content active">
+            <div class="main-title">KIT3GRAM</div>
+            <div class="sub-title">Приветствую тебя в нашем комьюнити!<br>Это твоя возможность перестать использовать лишние моды и боты.</div>
+            
+            <div class="card">
+                <div class="card-header"><i class="fa-solid fa-rocket" style="color: #6b7280;"></i><h3>КАК НАЧАТЬ</h3></div>
+                <div class="cmd-block" style="border-color: #6b7280;">
+                    <div class="cmd-name">ОТКРЫТИЕ СТОРИС ТЕЛЕГРАМ</div>
+                    <div class="cmd-desc">Инструкция по работе с историями</div>
+                </div>
+                <div class="cmd-block" style="border-color: #6b7280;">
+                    <div class="cmd-name">ИСПОЛЬЗОВАНИЕ БОТОВ ДЛЯ БИЗНЕСА</div>
+                    <div class="cmd-desc">Автоматизация бизнес-процессов</div>
+                </div>
+                <div class="cmd-block" style="border-color: #6b7280;">
+                    <div class="cmd-name">УПРАВЛЕНИЕ ЧАТ-БОТАМИ</div>
+                    <div class="cmd-desc">Настройка и взаимодействие</div>
+                </div>
+                <div class="cmd-block" style="border-color: #6b7280; margin-bottom: 0;">
+                    <div class="cmd-name">ДОБАВИТЬ НАШЕГО БОТА</div>
+                    <div class="cmd-desc">Внедрение нашего бота в ваши комнаты</div>
+                </div>
+            </div>
 
-    <div class="header">
-        <span class="logo">🤖</span>
-        <h1>SaveMod Bot</h1>
-        <div class="sub">Управляй ботом из мини-приложения</div>
-    </div>
+            <div class="card">
+                <div class="card-header"><i class="fa-solid fa-meteor" style="color: #6b7280;"></i><h3>СЛУЖЕБНЫЕ</h3></div>
+                <div class="cmd-block"><div class="cmd-name">.amonth</div><div class="cmd-desc">Рассылка статистики по итогам месяца доступна (1-2 раза в месяц)</div></div>
+                <div class="cmd-block"><div class="cmd-name">.month</div><div class="cmd-desc">Статистика по оплатам за месяц доступна (1-2 раза в месяц)</div></div>
+            </div>
 
-    <div class="status-card">
-        <div class="left">
-            <div class="label">📊 Твой статус</div>
-            <div class="value" id="statusText">🆓 Бесплатный</div>
+            <div class="card">
+                <div class="card-header"><i class="fa-solid fa-star" style="color: #6b7280;"></i><h3>РАЗВЛЕЧЕНИЯ</h3></div>
+                <div class="cmd-block"><div class="cmd-name">.fbo</div><div class="cmd-desc">Предсказание на сегодня</div></div>
+                <div class="cmd-block"><div class="cmd-name">.typing</div><div class="cmd-desc">Анимация печати текста</div></div>
+                <div class="cmd-block">
+                    <div class="cmd-name">.spam</div><div class="cmd-desc">Спам текстом 10 раз</div>
+                    <div class="cmd-limits">
+                        <span class="limit-basic">Обычный: 5 раз/день</span>
+                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium: Безлимит</span>
+                    </div>
+                </div>
+                <div class="cmd-block"><div class="cmd-name">.act</div><div class="cmd-desc">Имитация разных действий (поиск фото, отправка, игры...)</div></div>
+                <div class="cmd-block"><div class="cmd-name">.send</div><div class="cmd-desc">Фиктивный 2-й Клипто бота send 2.5</div></div>
+                <div class="cmd-block"><div class="cmd-name">.love</div><div class="cmd-desc">Красивая анимация сердца</div></div>
+                <div class="cmd-block"><div class="cmd-name">.k-kill</div><div class="cmd-desc">Авто-убийство в чате (как в kill)</div></div>
+                <div class="cmd-block"><div class="cmd-name">.cat</div><div class="cmd-desc">Случайное фото кота</div></div>
+                <div class="cmd-block"><div class="cmd-name">.troll</div><div class="cmd-desc">Спам случайными сообщениями</div></div>
+                <div class="cmd-block"><div class="cmd-name">.online</div><div class="cmd-desc">Имитация режима вечного онлайн</div></div>
+                <div class="cmd-block"><div class="cmd-name">.a-greet</div><div class="cmd-desc">Авто-приветствие новых сообщений (gura, yur)</div></div>
+                <div class="cmd-block"><div class="cmd-name">.ghoul</div><div class="cmd-desc">Я - дух</div></div>
+                <div class="cmd-block"><div class="cmd-name">.grs</div><div class="cmd-desc">Камень-Ножницы-Бумага (2 игра)</div></div>
+                <div class="cmd-block"><div class="cmd-name">.coin</div><div class="cmd-desc">Орёл или Решка (2 игра)</div></div>
+                <div class="cmd-block"><div class="cmd-name">.ttt</div><div class="cmd-desc">Крестики-нолики (2 игра)</div></div>
+                <div class="cmd-block">
+                    <div class="cmd-name">.game</div><div class="cmd-desc">Сыграть в игру (Tas, Shark, Beetle, VK)</div>
+                    <div class="cmd-limits">
+                        <span class="limit-basic">Обычный: 5 раз/день</span>
+                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium: Безлимит</span>
+                    </div>
+                </div>
+                <div class="cmd-block">
+                    <div class="cmd-name">.a-mute</div><div class="cmd-desc">Авто-мьют новых</div>
+                    <div class="cmd-limits">
+                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium: Безлимит</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><i class="fa-solid fa-circle-plus" style="color: #6b7280;"></i><h3>ПЛЮС ФУНКЦИИ</h3></div>
+                <div class="cmd-block">
+                    <div class="cmd-name">.auto</div><div class="cmd-desc">Автопост навстречу в чате</div>
+                    <div class="cmd-limits">
+                        <span class="limit-basic">Обычный: 5 раз/день</span>
+                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium: Безлимит</span>
+                    </div>
+                </div>
+                <div class="cmd-block"><div class="cmd-name">.delete</div><div class="cmd-desc">Выполнять автоудаление сообщений по ID</div></div>
+                <div class="cmd-block">
+                    <div class="cmd-name">.find</div><div class="cmd-desc">Поиск информации по юзеру или номеру</div>
+                    <div class="cmd-limits">
+                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium: Безлимит</span>
+                    </div>
+                </div>
+                <div class="cmd-block">
+                    <div class="cmd-name">.post</div><div class="cmd-desc">Быстро написать пост в чате</div>
+                    <div class="cmd-limits">
+                        <span class="limit-basic">Обычный: 5 раз/день</span>
+                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium: Безлимит</span>
+                    </div>
+                </div>
+                <div class="cmd-block">
+                    <div class="cmd-name">.image</div><div class="cmd-desc">Генерация изображения по запросу</div>
+                    <div class="cmd-limits">
+                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium: Безлимит</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header"><i class="fa-solid fa-user" style="color: #6b7280;"></i><h3>ПРОФИЛЬ</h3></div>
+                <div class="cmd-block"><div class="cmd-name">.nick</div><div class="cmd-desc">Авто-смена ника по интервалу: nick_on / nick_off</div></div>
+                <div class="cmd-block"><div class="cmd-name">.time</div><div class="cmd-desc">Авто-показ времени: time_on / time_off</div></div>
+                <div class="cmd-block"><div class="cmd-name">.remove</div><div class="cmd-desc">Очистка профиля, команд, обновление аватара</div></div>
+                <div class="cmd-block"><div class="cmd-name">.stories</div><div class="cmd-desc">Разрешить фото в 9 частях и публикацию в истории</div></div>
+                <div class="cmd-block">
+                    <div class="cmd-name">.post</div><div class="cmd-desc">Разрешить упоминание в фото и истории</div>
+                    <div class="cmd-limits">
+                        <span class="limit-premium"><i class="fa-regular fa-gem"></i> Premium: Безлимит</span>
+                    </div>
+                </div>
+                <div class="cmd-block"><div class="cmd-name">.status</div><div class="cmd-desc">Авто-статус профиля по расписанию</div></div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header"><i class="fa-solid fa-video" style="color: #6b7280;"></i><h3>СЕРИИ</h3></div>
+                <div class="cmd-block"><div class="cmd-name">.stories_top</div><div class="cmd-desc">Топ ваших серий</div></div>
+                <div class="cmd-block"><div class="cmd-name">.stories</div><div class="cmd-desc">Следить за серией как в TikTok</div></div>
+                <div class="cmd-block"><div class="cmd-name">.stories_freeze</div><div class="cmd-desc">Заморозить серию</div></div>
+                <div class="cmd-block"><div class="cmd-name">.stories_unfreeze</div><div class="cmd-desc">Разморозить серию</div></div>
+                <div class="cmd-block"><div class="cmd-name">.stories_stop</div><div class="cmd-desc">Отписаться от серии</div></div>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><i class="fa-solid fa-circle-info" style="color: #6b7280;"></i><h3>ИНФОРМАЦИЯ</h3></div>
+                <div class="cmd-block"><div class="cmd-name">.info</div><div class="cmd-desc">Информация о сообщении</div></div>
+                <div class="cmd-block"><div class="cmd-name">.ping</div><div class="cmd-desc">Проверка задержки бота</div></div>
+                <div class="cmd-block"><div class="cmd-name">.help</div><div class="cmd-desc">Вызвать это сообщение</div></div>
+                <div class="cmd-block"><div class="cmd-name">.subscribe</div><div class="cmd-desc">Купить подписку</div></div>
+            </div>
         </div>
-        <div class="right">
-            <div class="label">📌 Команды</div>
-            <div class="value" id="commandsCount">0 / 3</div>
+
+        <!-- 2. FAQ -->
+        <div id="tab-faq" class="tab-content">
+            <div class="main-title">FAQ</div>
+            <div class="sub-title">ЧАСТО ЗАДАВАЕМЫЕ ВОПРОСЫ</div>
+            <div class="card">
+                <div class="card-header"><i class="fa-solid fa-circle-question" style="color: #6b7280;"></i><h3>ВОПРОСЫ И ОТВЕТЫ</h3></div>
+                <div class="faq-question">ВЫ МОЖЕТЕ УКРАСТЬ ПОДАРКИ?</div>
+                <div class="faq-answer">Нет, мы не занимаемся кражей подарков. Просто не выдавайте лишние права боту, ему достаточно прав лишь на сообщения.</div>
+                <div class="faq-question">КАК СОХРАНИТЬ ОДНОРАЗОВОЕ МЕДИА?</div>
+                <div class="faq-answer">Отправьте сообщение в ответ на желаемое медиа любой текст, бот сохранит его и отправит в личные сообщения, внимание бот может загружать медиа до 50 Мб, это ограничение Telegram.</div>
+                <div class="faq-question">КТО ТАКИЕ "НЕИЗВЕСТНЫЕ ПОЛЬЗОВАТЕЛИ" В ТОПАХ?</div>
+                <div class="faq-answer">Это игроки, которые взаимодействуют с ботом, но ещё не заходили в само приложение. Чтобы соблюсти правила Telegram и защитить личные данные, мы скрываем их профили в общем списке до первого входа.</div>
+                <div class="faq-question">Я НАШЕЛ БАГ / У МЕНЯ ЕСТЬ ИДЕЯ, КАК МНЕ СООБЩИТЬ ОБ ЭТОМ?</div>
+                <div class="faq-answer">Вы можете написать нам в поддержку через Telegram по ссылке ниже, мы всегда рады обратной связи и помогаем с любыми проблемами!</div>
+                <button class="support-btn">НАПИСАТЬ В ПОДДЕРЖКУ <i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+            </div>
+        </div>
+
+        <!-- 3. ТОП ПОЛЬЗОВАТЕЛЕЙ -->
+        <div id="tab-trophy" class="tab-content">
+            <div class="main-title">ТОП</div>
+            <div class="sub-title">ТОП ПОЛЬЗОВАТЕЛЕЙ ПО ДНЯМ</div>
+            <div class="card" id="top-users-list" style="text-align: center; padding: 30px;">
+                <i class="fa-solid fa-trophy" style="font-size: 40px; color: #facc15; margin-bottom: 15px;"></i>
+                <h3>Загрузка...</h3>
+                <p style="color: #888; font-size: 13px; margin-top: 5px;">Данные подтягиваются из API.</p>
+            </div>
+        </div>
+
+        <!-- 4. СТАТИСТИКА -->
+        <div id="tab-chart" class="tab-content">
+            <div class="main-title">СТАТИСТИКА</div>
+            <div class="sub-title">Ваша активность</div>
+            <div class="card">
+                <div class="stats-grid">
+                    <div class="stat-block"><span>Дней с нами</span><strong id="user-days">0</strong></div>
+                    <div class="stat-block"><span>Сообщений</span><strong id="user-msgs">0</strong></div>
+                    <div class="stat-block"><span>Голосовых</span><strong id="user-voices">0</strong></div>
+                    <div class="stat-block"><span>Баланс</span><strong id="user-balance">0 ₽</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. ПРОФИЛЬ -->
+        <div id="tab-profile" class="tab-content">
+            <div class="main-title">ПРОФИЛЬ</div>
+            <div class="sub-title">Информация о пользователе</div>
+            <div class="card avatar-box">
+                <div class="avatar" style="background: url('https://i.pinimg.com/736x/db/32/3d/db323d1c5ef0f01e4b9d3a905118ea20.jpg') center/cover;"></div>
+                <div class="user-id" style="gap: 40px;">
+                    <div><span>USER ID</span><strong id="user-id-tag">Загрузка...</strong></div>
+                    <div><span>ID</span><strong id="user-mini-id">Загрузка...</strong></div>
+                </div>
+                <h2 id="user-full-name" style="font-size: 22px; letter-spacing: 1px; font-weight: bold;">! КИТАЕЦ</h2>
+                <p id="user-nickname" style="color: #aaa; font-size: 15px; margin-bottom: 10px;">@conductiing</p>
+                
+                <div style="background: rgba(255, 255, 255, 0.03); padding: 10px 20px; border-radius: 12px; margin-bottom: 20px; display: flex; flex-direction: column; align-items: center;">
+                    <span style="font-size: 11px; color: #888;">ВЫ С НАМИ</span>
+                    <span id="profile-days" style="font-size: 18px; font-weight: bold; letter-spacing: 1px;">Загрузка...</span>
+                </div>
+                <div class="sub-button"><i class="fa-solid fa-crown"></i> ПОДПИСКА ОТСУТСТВУЕТ</div>
+            </div>
+        </div>
+
+        <!-- 6. НАСТРОЙКИ -->
+        <div id="tab-settings" class="tab-content">
+            <div class="main-title">НАСТРОЙКИ</div>
+            <div class="sub-title">Управление вашим профилем</div>
+            <div class="card">
+                <div class="toggle-wrap">
+                    <div class="toggle-text">
+                        <h3>ПРИВАТНЫЙ ПРОФИЛЬ</h3>
+                        <p>Скрывает ваше имя, фамилию и аватар в топах. Вместо них будет отображаться "Приватный пользователь"</p>
+                    </div>
+                    <div class="toggle-switch active"></div>
+                </div>
+                <div class="toggle-wrap">
+                    <div class="toggle-text">
+                        <h3>ИСКЛЮЧИТЬ ИЗ ТОПОВ</h3>
+                        <p>Ваш профиль не будет отображаться в таблицах лидеров</p>
+                    </div>
+                    <div class="toggle-switch active"></div>
+                </div>
+                <div style="text-align: center; margin-top: 12px; font-size: 12px; color: #555;">Изменения применяются мгновенно</div>
+            </div>
         </div>
     </div>
 
-    <!-- PREMIUM БЛОК (как в SaveMod) -->
-    <div class="premium-block">
-        <div class="title">⭐ SaveMOD Premium</div>
-        <div class="desc">Безлимит на все команды • Приоритетная обработка</div>
-        <div class="prices">
-            <button class="price-btn" onclick="buyPremium(50, '1 месяц')"><span class="star">⭐</span> 1м — 50</button>
-            <button class="price-btn" onclick="buyPremium(150, '3 месяца')"><span class="star">⭐</span> 3м — 150</button>
-            <button class="price-btn" onclick="buyPremium(250, '12 месяцев')"><span class="star">⭐</span> 12м — 250</button>
-            <button class="price-btn" onclick="buyPremium(500, 'навсегда')"><span class="star">⭐</span> ∞ — 500</button>
-        </div>
-    </div>
+    <!-- МЕНЮ -->
+    <nav class="glass-navbar">
+        <div class="nav-item active" data-target="tab-home"><i class="fa-solid fa-house"></i></div>
+        <div class="nav-item" data-target="tab-faq"><i class="fa-regular fa-circle-question"></i></div>
+        <div class="nav-item" data-target="tab-trophy"><i class="fa-solid fa-trophy"></i></div>
+        <div class="nav-item" data-target="tab-chart"><i class="fa-solid fa-chart-line"></i></div>
+        <div class="nav-item" data-target="tab-profile"><i class="fa-regular fa-user"></i></div>
+        <div class="nav-item" data-target="tab-settings"><i class="fa-solid fa-gear"></i></div>
+    </nav>
 
-    <!-- КОМАНДЫ (как в Cisgram) -->
-    <div class="section">
-        <div class="section-title">📝 Быстрые команды</div>
-        <div class="btn-grid">
-            <button class="btn" onclick="sendCommand('.love')">
-                <span class="emoji">❤️</span> Любовь
-            </button>
-            <button class="btn" onclick="sendCommand('.troll')">
-                <span class="emoji">🤬</span> Тролль
-            </button>
-            <button class="btn" onclick="sendCommand('.flip')">
-                <span class="emoji">🪙</span> Монетка
-            </button>
-            <button class="btn" onclick="sendCommand('.dice')">
-                <span class="emoji">🎲</span> Кубик
-            </button>
-            <button class="btn" onclick="sendCommand('.zaebu')">
-                <span class="emoji">🎵</span> Заёбушка
-            </button>
-            <button class="btn" onclick="sendCommand('.sw Привет')">
-                <span class="emoji">🔄</span> Смена раскладки
-            </button>
-            <button class="btn btn-full btn-primary" onclick="sendCommand('.buy')">
-                💎 Купить Premium
-            </button>
-        </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="section">
-        <div class="section-title">🎨 Форматирование</div>
-        <div class="btn-grid two-col">
-            <button class="btn" onclick="sendCommandWithText('.bold')">
-                <span class="emoji">🔤</span> Bold
-            </button>
-            <button class="btn" onclick="sendCommandWithText('.italic')">
-                <span class="emoji">📝</span> Italic
-            </button>
-            <button class="btn" onclick="sendCommandWithText('.monospace')">
-                <span class="emoji">⌨️</span> Monospace
-            </button>
-            <button class="btn" onclick="sendCommandWithText('.underline')">
-                <span class="emoji">📏</span> Underline
-            </button>
-            <button class="btn" onclick="sendCommandWithText('.leet')">
-                <span class="emoji">🔢</span> Leet
-            </button>
-            <button class="btn" onclick="sendCommand('.type Привет')">
-                <span class="emoji">✍️</span> Type
-            </button>
-        </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="section">
-        <div class="section-title">🎮 Игры</div>
-        <div class="btn-grid two-col">
-            <button class="btn" onclick="sendCommand('.ttt @username')">
-                <span class="emoji">❌</span> Крестики-нолики
-            </button>
-            <button class="btn" onclick="sendCommand('.duel @username 10')">
-                <span class="emoji">⚔️</span> Дуэль
-            </button>
-            <button class="btn" onclick="sendCommand('.chk @username')">
-                <span class="emoji">♟️</span> Шашки
-            </button>
-            <button class="btn" onclick="sendCommand('.bw')">
-                <span class="emoji">🎨</span> Закрась поле
-            </button>
-        </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="section">
-        <div class="section-title">🔍 Полезное</div>
-        <div class="btn-grid two-col">
-            <button class="btn" onclick="sendCommand('.afk Отошёл')">
-                <span class="emoji">🌙</span> AFK
-            </button>
-            <button class="btn" onclick="sendCommand('.status Онлайн')">
-                <span class="emoji">📌</span> Статус
-            </button>
-            <button class="btn" onclick="sendCommand('.time')">
-                <span class="emoji">🕐</span> Время в имя
-            </button>
-            <button class="btn" onclick="sendCommand('.nk')">
-                <span class="emoji">🐱</span> Неко-тян
-            </button>
-            <button class="btn" onclick="sendCommand('.short')">
-                <span class="emoji">📝</span> Пересказ
-            </button>
-            <button class="btn" onclick="sendCommand('.dox @username')">
-                <span class="emoji">🕵️</span> Досье
-            </button>
-            <button class="btn btn-full" onclick="sendCommand('.help')">
-                <span class="emoji">❓</span> Все команды
-            </button>
-        </div>
-    </div>
-
-    <div class="footer">
-        SaveMod Bot • <span id="version">v3.0</span> • 
-        <a href="#" onclick="sendCommand('/start'); return false;">🔄 Открыть бота</a>
-    </div>
-
+    <!-- JS СВЯЗЬ С БОТОМ -->
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.ready();
-
-        // ============ ОТПРАВКА КОМАНД ============
-        function sendCommand(cmd) {
-            tg.sendData(JSON.stringify({ command: cmd }));
-            tg.close();
-        }
-
-        function sendCommandWithText(cmd) {
-            const text = prompt('Введите текст:');
-            if (text !== null && text.trim() !== '') {
-                tg.sendData(JSON.stringify({ command: cmd + ' ' + text.trim() }));
-                tg.close();
-            }
-        }
-
-        function buyPremium(amount, title) {
-            const confirmText = `💎 Купить Premium — ${title}\n\n⭐ Стоимость: ${amount} звёзд\n\nПодтверждаешь покупку?`;
-            if (confirm(confirmText)) {
-                tg.sendData(JSON.stringify({ 
-                    command: `.buy_premium ${amount} ${title}`
-                }));
-                tg.close();
-            }
-        }
-
-        // ============ ПОЛУЧЕНИЕ СТАТИСТИКИ ============
-        tg.onEvent('mainButtonClicked', function() {
-            tg.sendData(JSON.stringify({ action: 'get_stats' }));
-        });
-
-        // Обновление статуса из бота
-        window.updateStats = function(stats) {
-            if (stats.is_premium) {
-                document.getElementById('statusText').innerHTML = '⭐ Premium';
-                document.getElementById('statusText').className = 'value badge-premium';
-            } else {
-                document.getElementById('statusText').innerHTML = '🆓 Бесплатный';
-                document.getElementById('statusText').className = 'value badge-free';
-            }
-            document.getElementById('commandsCount').textContent = (stats.daily_commands || 0) + ' / 3';
-        };
-
-        // ============ ПОЛУЧЕНИЕ ДАННЫХ ОТ БОТА ============
-        tg.ready();
-
-        // Если бот присылает данные через sendData
         document.addEventListener('DOMContentLoaded', function() {
-            // Запрашиваем статистику при открытии
-            tg.sendData(JSON.stringify({ action: 'get_stats' }));
-        });
+            const navItems = document.querySelectorAll('.nav-item');
+            const tabContents = document.querySelectorAll('.tab-content');
 
-        // Обработка входящих данных от бота
-        tg.onEvent('popupClosed', function(data) {
-            // Можно обрабатывать ответы от бота
-        });
+            // ВАЖНО: Замените этот URL на ваш адрес ngrok (или залейте его на сервер)
+            // Если запускаете локально для теста, оставьте localhost
+            const API_BASE = "http://localhost:8080"; 
 
-        // Версия
-        document.getElementById('version').textContent = 'v' + (new Date().getFullYear());
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    tabContents.forEach(el => el.classList.remove('active'));
+                    navItems.forEach(el => el.classList.remove('active'));
+                    document.getElementById(targetId).classList.add('active');
+                    this.classList.add('active');
+                    
+                    if(targetId === 'tab-trophy') loadTopUsers();
+                    if(targetId === 'tab-chart' || targetId === 'tab-profile') loadUserStats();
+                });
+            });
+
+            // Загрузка топа
+            async function loadTopUsers() {
+                const container = document.getElementById('top-users-list');
+                try {
+                    const response = await fetch(`${API_BASE}/top_users`);
+                    if(!response.ok) throw new Error('Ошибка');
+                    const users = await response.json();
+                    let html = '';
+                    if(users.length === 0) {
+                        html = `<i class="fa-solid fa-trophy" style="font-size: 40px; color: #facc15; margin-bottom: 15px;"></i><h3>Нет активных пользователей</h3>`;
+                    } else {
+                        html = `<div style="text-align: left;">`;
+                        users.slice(0, 10).forEach((user, i) => {
+                            const medal = i===0 ? '🥇' : i===1 ? '🥈' : i===2 ? '🥉' : `${i+1}.`;
+                            html += `<div style="display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.03);">
+                                <span style="width:25px;">${medal}</span>
+                                <span style="flex:1; font-weight:bold;">${user.first_name || 'Аноним'}</span>
+                                <span style="color:#888; font-size:13px;">${user.days} дней</span>
+                            </div>`;
+                        });
+                        html += `</div>`;
+                    }
+                    container.innerHTML = html;
+                } catch (e) {
+                    container.innerHTML = `<p style="color: #ff4444;">⚠️ Ошибка соединения с API! Проверьте запуск ngrok.</p>`;
+                }
+            }
+
+            // Загрузка статистики и профиля
+            async function loadUserStats() {
+                const tg = window.Telegram?.WebApp;
+                let user_id = tg ? tg.initDataUnsafe?.user?.id : 1455597776; 
+                if(!user_id) user_id = 1455597776;
+
+                try {
+                    const response = await fetch(`${API_BASE}/user_stats`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ user_id: user_id })
+                    });
+                    const data = await response.json();
+                    
+                    document.getElementById('user-days').textContent = data.days + ' дн.';
+                    document.getElementById('user-msgs').textContent = data.messages;
+                    document.getElementById('user-voices').textContent = data.voices;
+                    document.getElementById('user-balance').textContent = data.balance + ' ₽';
+
+                    document.getElementById('user-id-tag').textContent = data.user_id;
+                    document.getElementById('user-mini-id').textContent = data.id; 
+                    document.getElementById('user-full-name').textContent = data.first_name + ' ' + (data.last_name || '');
+                    document.getElementById('user-nickname').textContent = '@' + (data.username || 'Нет');
+                    document.getElementById('profile-days').textContent = data.days + ' дней';
+                } catch (e) {
+                    console.log("Статистика не загружена, проверьте API:", e);
+                }
+            }
+        });
     </script>
 </body>
 </html>
